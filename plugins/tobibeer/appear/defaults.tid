@@ -1,8 +1,6 @@
 title: $:/plugins/tobibeer/appear/defaults
 type: application/x-tiddler-dictionary
 
-mode: block
-reveal-element: div
 reveal-block-element: div
 reveal-inline-element: span
 button-label: »
