@@ -32,18 +32,17 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 	this.execute();
 
 	try {
-	var appearNodes,button,classes,list={},reveal,
+	var appearNodes,button,list={},reveal,
 		self = this,
 		current = this.getVariable("currentTiddler"),
 		def = $tw.wiki.getTiddlerData("$:/plugins/tobibeer/appear/defaults",{}),
 		getVal = function(param,fallback){
 			var result = param,
 			fallbacks = {
-				"label": "»",
-				"btn-tag": "button",
-				"mode": "block",
-				"mode-block-element": "div",
-				"mode-inline-element": "span"
+				"button-label": "»",
+				"button-tag": "button",
+				"reveal-block-element": "div",
+				"reveal-inline-element": "span"
 			};
 			if(!result) {
 				result = def[fallback];
@@ -66,7 +65,6 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 				node[attr] = val;
 			});
 		},
-		mode = self.parseTreeNode.isBlock ? "block" : "inline",
 		state = self.attr.button.state,
 		children = this.parseTreeNode.children;
 
@@ -79,8 +77,14 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 		list = {type:"list",children:children};
 		init(list, "list");
 	}
-	reveal = {type:"reveal",mode:mode,state:state,children:list};
+	reveal = {type:"reveal",state:state,children:list};
 	init(reveal,"reveal");
+	if(!reveal.mode) {
+		reveal.mode = self.parseTreeNode.isBlock ? "block" : "inline";
+	}
+	if(!reveal.tag) {
+		reveal.tag = getVal(reveal,"reveal-" + reveal.mode + "-element");
+	}
 
 	appearNodes = [button,reveal];
 
@@ -100,7 +104,7 @@ AppearWidget.prototype.execute = function() {
 	// Attribute mapping
 	self.attr = {
 		map: {
-			reveal: ["state",
+			reveal: ["state","mode",
 					 "animate","class","default","position","retain","style","tag","text","type"],
 			button: ["btn-tag","btn-class",
 					 "aria-label","class","tooltip","popup","style"],
