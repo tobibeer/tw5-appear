@@ -1,0 +1,13 @@
+title: appear-Styles
+tags: $:/tags/Stylesheet
+created: 20151209210644334
+creator: Tobias Beer
+modified: 20151209213657027
+type: text/css
+
+div.appear-content{
+padding: 5px;
+border: 1px solid #eee;
+background: #fcfcfc;
+border-radius:3px;
+}

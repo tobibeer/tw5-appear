@@ -1,0 +1,149 @@
+title: appear-Examples
+created: 20150201173223292
+creator: Tobias Beer
+modified: 20151209181218884
+modifier: Tobias Beer
+
+\define slider-label(prefix,suffix)
+<span class="grey-svg">$prefix$<$text text="$(currentTiddler)$"/>$suffix$</span>
+\end
+
+\define slide-tiddler-tooltip()
+show/hide tiddler $(currentTiddler)$
+\end
+
+\define slide-tiddler-qualify(example)
+$:/state/slide-tiddler-$example$$(qualified)$
+\end
+
+\define slide-tiddler(label,content,tooltip,state,label-hide)
+
+<<slider
+label:"$label$"
+content:"""$content$"""
+tooltip:"$tooltip$"
+state:"$state$"
+label-hide:"$label-hide$"
+>>
+\end
+
+The following example creates a slider for the [[GettingStarted]] tiddler...
+
+<$macrocall $name=` 
+text="""<<appear show GettingStarted "$:/state/slider/GettingStartedDemo" label-hide:hide>>"""/>
+
+The next example shows custom content inline using an italics element hiding the closing label entirely using the `&zwj;` entity, aka a "zero-width joiner"...
+
+<$macrocall $name=` 
+text="""<<appear show "this text" "$:/state/slider/ItalicTextDemo" mode:inline label-hide:"&zwj;" element:i plain:yes>>"""/>
+
+Thanks to its way of transcluding, you can even output a filtered list or use templates:
+
+<$macrocall $name=` 
+text="""<<appear Plugins "{ [tag[Plugins]] }" "$:/state/slider/PluginsDemo">>"""/>
+
+The next example implements custom arrows with a helper macro thus requiring to use the macrocall widget, wrapped using the <<x TiddlerWidget>> to set a different context.
+
+```
+\define slider-label(prefix,suffix)
+$prefix$<$text text="$(currentTiddler)$"/>$suffix$
+\end
+```
+<$macrocall $name=` 
+text="""<$tiddler tiddler="GettingStarted">
+<$macrocall
+$name="slider"
+label=<<slider-label "" " {{$:/core/images/chevron-right}}">>
+content="!!text"
+state="$:/state/slider/GettingStartedDemo2"
+label-hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
+/>
+</$tiddler>"""/>
+
+<style>
+.grey-svg svg{
+fill:lightgrey;
+height:12px !important;
+}
+.grey-svg:hover svg{
+fill:grey;
+}
+</style>
+
+!! Plain Sliders
+
+<$list filter="[list[Welcome]]">
+
+<$set name=qualified value=<<qualify $(currentTiddler)$>>>
+<$macrocall
+$name=slide-tiddler
+label=<<slider-label>>
+content="!!text"
+tooltip=<<slide-tiddler-tooltip>>
+state=<<slide-tiddler-qualify PS>>
+/>
+</$set>
+
+</$list>
+
+!! Sliders With Prefix
+
+<$list filter="[list[Welcome]]">
+
+<$set name=qualified value=<<qualify $(currentTiddler)$>>>
+<$macrocall
+$name=slide-tiddler
+label=<<slider-label "+ ">>
+content="!!text"
+tooltip=<<slide-tiddler-tooltip>>
+state=<<slide-tiddler-qualify SWP>>
+label-hide=<<slider-label "- ">>
+/>
+</$set>
+</$list>
+
+!! Sliders With Suffix
+
+<$list filter="[list[Welcome]]">
+
+<$set name=qualified value=<<qualify $(currentTiddler)$>>>
+<$macrocall
+$name=slide-tiddler
+label=<<slider-label "" " &gt;">>
+content="!!text"
+tooltip=<<slide-tiddler-tooltip>>
+state=<<slide-tiddler-qualify SWS>>
+label-hide=<<slider-label "" " &lt;">>
+/>
+</$set>
+</$list>
+
+!! Sliders With Prefix And Suffix
+
+<$list filter="[list[Welcome]]">
+
+<$set name=qualified value=<<qualify $(currentTiddler)$>>>
+<$macrocall
+$name=slide-tiddler
+label=<<slider-label "" " &gt;">>
+content="!!text"
+tooltip=<<slide-tiddler-tooltip>>
+state=<<slide-tiddler-qualify SWPAS>>
+label-hide=<<slider-label "&lt; ">>
+/>
+</$set>
+</$list>
+
+!! Sliders With Images
+
+<$list filter="[list[Welcome]]">
+
+<$macrocall
+$name=slide-tiddler
+label=<<slider-label "" " {{$:/core/images/chevron-right}}">>
+content="!!text"
+tooltip=<<slide-tiddler-tooltip>>
+state=<<slide-tiddler-qualify SWI>>
+label-hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
+/>
+</$list>
