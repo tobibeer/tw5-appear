@@ -15,7 +15,7 @@ Some attributes of the ''appear'' widget directly specify its behavior while oth
 |''once''|when you set this keyword, the button will be hidden once the content is revealed||
 |''$state''|a simplified state-id appended to an already qualified default state generated for you<br>&raquo; in other words, there is no need for you to specify a complicated system tiddler path|see [[defaults|appear-Defaults]] & [[states|appear-States]]|
 |''mode''|whether or not the inner reveal is rendered in block or inline mode||
-|''handle''|specifies a handler type for an appear widget ued in a placeholder template tagged ''$:/tags/PageTemplate'' to remotely output the contents of all appear widgets whose ''handler'' attribute matches the same type<br>&raquo; by default handled via the state `$:/temp/appear/handle/<handle>`||
+|''handle''|specifies a handler type for an appear widget used in a placeholder template tagged ''$:/tags/PageTemplate'' to remotely output the contents of all appear widgets whose ''handler'' attribute matches the same type<br>&raquo; by default handled via the state `$:/temp/appear/handle/<handle>`||
 |''handler''|specifies the handler type of the remote appear widget that is configured to ''handle'' this appear widget's inner reveal||
 |''variables''|should you have specified a remote ''handler'', specify context variables you wish preserved for the inner reveal as it is rendered in a different context|`currentTiddler`|
 |>|>|!Button Attributes|
