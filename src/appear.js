@@ -390,7 +390,7 @@ AppearWidget.prototype.checkHandler = function(reveal) {
 };
 
 /*
-Custom click handler for a button to have a popup-revel rendered based on an absolute position
+Custom click handler for a button to have a popup-reveal rendered based on an absolute position
 */
 AppearWidget.prototype.triggerAbsolutePopup = function() {
 	var offset = (
