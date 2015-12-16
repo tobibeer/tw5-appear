@@ -1,0 +1,23 @@
+created: 20151216073014999
+creator: Tobias Beer
+modified: 20151216114443234
+modifier: Tobias Beer
+tags: 
+title: appear-Modes
+type: text/vnd.tiddlywiki
+
+Depending on your use of line-breaks, TiddlyWiki detects whether or not to render content in block or inline mode. As this may be contrary to how you want the output to behave, you can specifically instruct the appear widget to render in modes:
+
+; mode
+: use this attribute to specify whether the inner reveal is set to //block// or //inline// mode
+:: any keyword other than the two will be interpreted as block mode while giving the inner reveal the class `appear-<mode>`
+
+Notice, however, that using inline mode will not necessarily display all contents inline. A heading will still be a heading and a paragraph a paragraph.
+
+!! Example
+
+<<` """before <$appear mode="custom">
+
+!Hello There
+
+I am text.</$appear> after""">>

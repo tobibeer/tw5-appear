@@ -1,6 +1,15 @@
-title: appear-Info
 created: 20151209180941139
 creator: Tobias Beer
-modified: 20151209205457748
+modified: 20151216075358957
+modifier: Tobias Beer
+title: appear-Info
+type: text/vnd.tiddlywiki
 
-The ''appear'' widget displays a button which when clicked reveals hidden content as a popup or slider.
+The ''appear'' widget displays a button which when clicked reveals hidden content to produce the following results:
+
+* ''popups'', taken out of the document flow if you want them to
+* ''sliders'', block or inline
+* accordion ''menus''
+* interactive ''stories''
+
+Under the hood, there is at least one <<x ButtonWidget>> and one <<x RevealWidget>> it creates which may be wrapped in further elements, e.g. more reveal widgets, as needed, so as to achieve the desired output.

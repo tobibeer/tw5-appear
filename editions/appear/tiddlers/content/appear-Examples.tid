@@ -1,149 +1,137 @@
-title: appear-Examples
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151209181218884
+modified: 20151216103007088
 modifier: Tobias Beer
+title: appear-Examples
+type: text/vnd.tiddlywiki
 
-\define slider-label(prefix,suffix)
-<span class="grey-svg">$prefix$<$text text="$(currentTiddler)$"/>$suffix$</span>
-\end
+<div class="grey-svg">
 
-\define slide-tiddler-tooltip()
-show/hide tiddler $(currentTiddler)$
-\end
+''simple slider:''
 
-\define slide-tiddler-qualify(example)
-$:/state/slide-tiddler-$example$$(qualified)$
-\end
+<<` """before <$appear>
 
-\define slide-tiddler(label,content,tooltip,state,label-hide)
+!Hello There
 
-<<slider
-label:"$label$"
-content:"""$content$"""
-tooltip:"$tooltip$"
-state:"$state$"
-label-hide:"$label-hide$"
->>
-\end
+I am text.</$appear> after""">>
 
-The following example creates a slider for the [[GettingStarted]] tiddler...
+''simple popup:''
+
+<<` """before <$appear type=popup>
+
+!Hello There
+
+I am text.</$appear> after""">>
+
+''simple slider with label:''
+
+The below uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
+
+<<` """before <$appear show="slide down" $state="slide-label">
+
+!Hello There
+
+I am text.</$appear> after""">>
+
+''simple slider with show/hide label:''
+
+<<` """before <$appear show="open &raquo;" hide="&laquo; close" $state="slide-labels">
+
+!Hello There
+
+I am text.</$appear> after""">>
+
+''inline slider with custom hide button:''
+
+<<` """before <$appear hide="&laquo;" mode="inline" $state="inline">//I am text.//</$appear> after""">>
+
+''same as block-mode slider:''
+
+<<` """before <$appear hide="&laquo;" $state="block">//I am text.//</$appear> after""">>
+
+''same as slider with custom mode''
+
+Any non-standard mode is interpreted as //block// mode, however without applying the default slider-styles:
+
+<<` """before <$appear hide="&laquo;" mode="custom" $state="custom-block">//I am text.//</$appear> after""">>
+
+''inline slider that only shows once:''
+
+<<` """before <$appear once mode="inline" $state="inline-once">//I am text, and you cannot hide me once you see me.//</$appear> after""">>
+
+''slider with images in the labels:''
+
+<<` """before <$appear show="open {{$:/core/images/chevron-right}}" hide="{{$:/core/images/chevron-left}} close" $state="slide-image-labels">
+
+!Hello There
+
+I am text.</$appear> after""">>
+
+''simple popup with a custom label:''
+
+<<` """before <$appear show="click to open popup" type=popup>
+
+!Hello There
+
+I am text.</$appear> after""">>
+
+''one way to do a tiddler slider:''
 
 <$macrocall $name=` 
-text="""<<appear show GettingStarted "$:/state/slider/GettingStartedDemo" label-hide:hide>>"""/>
+text="""<$vars tid="GettingStarted">
+<$appear show="<$text text=<<tid>>/>" $state="slide-tiddler" mode="block">
+<$transclude mode="block" tiddler=<<tid>>/>
+</$appear>
+</$vars>"""/>
 
-The next example shows custom content inline using an italics element hiding the closing label entirely using the `&zwj;` entity, aka a "zero-width joiner"...
+''a popup with a list''
 
 <$macrocall $name=` 
-text="""<<appear show "this text" "$:/state/slider/ItalicTextDemo" mode:inline label-hide:"&zwj;" element:i plain:yes>>"""/>
+text="""before <$appear type="popup" $state="popup-list">
 
-Thanks to its way of transcluding, you can even output a filtered list or use templates:
+{{{[prefix[appear]sort[title]]}}}
+</$appear> after"""/>
 
-<$macrocall $name=` 
-text="""<<appear Plugins "{ [tag[Plugins]] }" "$:/state/slider/PluginsDemo">>"""/>
+''another way for a tiddler slider''
 
-The next example implements custom arrows with a helper macro thus requiring to use the macrocall widget, wrapped using the <<x TiddlerWidget>> to set a different context.
+The next example implements custom arrows with a helper macro, wrapped using the <<x TiddlerWidget>> to set a different context.
 
 ```
 \define slider-label(prefix,suffix)
-$prefix$<$text text="$(currentTiddler)$"/>$suffix$
+@@.grey-svg $prefix$<$text text="$(currentTiddler)$"/>$suffix$@@
 \end
 ```
+
 <$macrocall $name=` 
 text="""<$tiddler tiddler="GettingStarted">
-<$macrocall
-$name="slider"
-label=<<slider-label "" " {{$:/core/images/chevron-right}}">>
-content="!!text"
-state="$:/state/slider/GettingStartedDemo2"
-label-hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
-/>
+<$appear
+show=<<slider-label "" " {{$:/core/images/chevron-right}}">>
+hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
+$state="another-tiddler-slider">
+<$transclude mode="block"/>
 </$tiddler>"""/>
 
-<style>
-.grey-svg svg{
-fill:lightgrey;
-height:12px !important;
-}
-.grey-svg:hover svg{
-fill:grey;
-}
-</style>
+''an accordion menu''
 
-!! Plain Sliders
+Making use of the above slider-label macro and another helper macro for the tooltip:
 
-<$list filter="[list[Welcome]]">
+```
+\define slider-tooltip()
+show/hide tiddler '$(currentTiddler)$'
+\end
+```
 
-<$set name=qualified value=<<qualify $(currentTiddler)$>>>
-<$macrocall
-$name=slide-tiddler
-label=<<slider-label>>
-content="!!text"
-tooltip=<<slide-tiddler-tooltip>>
-state=<<slide-tiddler-qualify PS>>
-/>
-</$set>
+<$macrocall $name="`" text="""<$list filter="[all[shadows]prefix[$:/plugins/tobibeer/appear/]sort[title]]">
+<$appear
+show=<<slider-label>>
+tooltip=<<slider-tooltip>>
+state="$:/state/menu/accordion">
+<$transclude mode="block"/>
+</$appear><br>
+</$list>"""/>
 
-</$list>
+''using a handler in problem areas''
 
-!! Sliders With Prefix
+<$macrocall $name="`" text="""| <$appear show="click to show" hide="click to hide" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
 
-<$list filter="[list[Welcome]]">
-
-<$set name=qualified value=<<qualify $(currentTiddler)$>>>
-<$macrocall
-$name=slide-tiddler
-label=<<slider-label "+ ">>
-content="!!text"
-tooltip=<<slide-tiddler-tooltip>>
-state=<<slide-tiddler-qualify SWP>>
-label-hide=<<slider-label "- ">>
-/>
-</$set>
-</$list>
-
-!! Sliders With Suffix
-
-<$list filter="[list[Welcome]]">
-
-<$set name=qualified value=<<qualify $(currentTiddler)$>>>
-<$macrocall
-$name=slide-tiddler
-label=<<slider-label "" " &gt;">>
-content="!!text"
-tooltip=<<slide-tiddler-tooltip>>
-state=<<slide-tiddler-qualify SWS>>
-label-hide=<<slider-label "" " &lt;">>
-/>
-</$set>
-</$list>
-
-!! Sliders With Prefix And Suffix
-
-<$list filter="[list[Welcome]]">
-
-<$set name=qualified value=<<qualify $(currentTiddler)$>>>
-<$macrocall
-$name=slide-tiddler
-label=<<slider-label "" " &gt;">>
-content="!!text"
-tooltip=<<slide-tiddler-tooltip>>
-state=<<slide-tiddler-qualify SWPAS>>
-label-hide=<<slider-label "&lt; ">>
-/>
-</$set>
-</$list>
-
-!! Sliders With Images
-
-<$list filter="[list[Welcome]]">
-
-<$macrocall
-$name=slide-tiddler
-label=<<slider-label "" " {{$:/core/images/chevron-right}}">>
-content="!!text"
-tooltip=<<slide-tiddler-tooltip>>
-state=<<slide-tiddler-qualify SWI>>
-label-hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
-/>
-</$list>
+</div>

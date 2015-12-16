@@ -1,0 +1,42 @@
+created: 20151216095443224
+creator: Tobias Beer
+modified: 20151216114033941
+modifier: Tobias Beer
+tags: 
+title: appear-States
+type: text/vnd.tiddlywiki
+
+The appear widget simplifies <<x StateMechanism "state handling">> for you, by default not even requiring you to specify a state at all. In that case, a state is automatically qualified for you using the <<x "qualify Macro">> algorithm and a few extra bits extracted from the attributes.
+
+What's more, you do not need to know anything about how to correctly match the different state attributes of the underlying <<x ButtonWidget>> or <<x RevealWidget>>, i.e. no "popup" attribute" for you to specify. All you need to declare is the state you wish to use and the type with which you wish it displayed.
+
+If the automatically qualified state should not be good enough to create a unique state, you can use the ''$state'' attribute to simply append a unique string to the qualified state already calculated for you.
+
+Last but not least, should you ever wish full control over the eventual state tiddler, simply use the ''state'' attribute as usual.
+
+Unless you change the [[default-state|appear-Defaults]], as you can see in the [[defaults|appear-Defaults]], all state tiddlers are by default put under `$:/temp/` and are thus not persisted.
+
+@@.note
+''Note:'' Except for `type="popup"`, the state value is set to the current tiddler title, which eventually is what makes accordion style menus work, see [[examples|appear-Examples]].
+@@
+
+!! Handler States
+
+Should you render inner reveals at remote locations away from the document flow, the corresponding handler state is managed at a tiddler under the namespace `$:/temp/appear-handlers/`.
+
+For an example, <$appear show="click me" mode="inline" type="popup" handler="popups">
+This popup content is actually handled by:<br>
+[[$:/.tb/ui/PageTemplate/popups]]</$appear>:
+
+Here is the handler state for the widget that does `handle="popups"`:<br>
+{{{ [prefix[$:/temp/appear-handlers/]] }}}
+
+@@.note
+''Technical Note:'' It contains the full parse tree for the inner reveal of each appear widget that specifies `handler="popups"`, thus rendered into the appear widget specifying `handle="popups"`, e.g. [[$:/.tb/ui/PageTemplate/popups]].
+@@
+
+!! Currently Saved States
+
+You will find all current appear-widget state tiddlers in this wiki listed below after you played with the [[Examples|appear-Examples]] or <$appear once show="click me" mode="inline">now there's a state tiddler for you</$appear>:
+
+{{{ [prefix[$:/temp/appear/]] }}}

@@ -1,13 +1,9 @@
-title: appear-Styles
-tags: $:/tags/Stylesheet
-created: 20151209210644334
+created: 20151216094336360
 creator: Tobias Beer
-modified: 20151209213657027
-type: text/css
+modified: 20151216094449945
+modifier: Tobias Beer
+tags: 
+title: appear-Styles
+type: text/vnd.tiddlywiki
 
-div.appear-content{
-padding: 5px;
-border: 1px solid #eee;
-background: #fcfcfc;
-border-radius:3px;
-}
+The default styles for the appear-widget are defined in <<source "$:/plugins/tobibeer/appear/styles">>
