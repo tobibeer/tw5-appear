@@ -1,7 +1,0 @@
-title: $:/plugins/tobibeer/appear/defaults
-type: application/x-tiddler-dictionary
-
-reveal-block-element: div
-reveal-inline-element: span
-button-label: »
-button-class: tc-btn-invisible tc-tiddlylink
