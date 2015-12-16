@@ -1,13 +1,13 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151216133838962
+modified: 20151216135242009
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
 
 <div class="grey-svg">
 
-''simple slider:''
+!! Simple Slider
 
 <<` """before <$appear>
 
@@ -15,7 +15,7 @@ type: text/vnd.tiddlywiki
 
 I am text.</$appear> after""">>
 
-''simple popup:''
+!! Simple Popup
 
 <<` """before <$appear type=popup>
 
@@ -23,51 +23,51 @@ I am text.</$appear> after""">>
 
 I am text.</$appear> after""">>
 
-''simple slider with label:''
+!! Simple Slider With Custom Button
 
 The below uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
 
-<<` """before <$appear show="slide down" $state="slide-label">
+<<` """before <$appear show="slide down" $state="slider-button">
 
 !Hello There
 
 I am text.</$appear> after""">>
 
-''simple slider with show/hide label:''
+!! Simple Slider With Custom Show / Hide Buttons
 
-<<` """before <$appear show="open &raquo;" hide="&laquo; close" $state="slide-labels">
+<<` """before <$appear show="open &raquo;" hide="&laquo; close" $state="slider-buttons">
 
 !Hello There
 
 I am text.</$appear> after""">>
 
-''inline slider with custom hide button:''
+!! Inline Slider With Custom Hide Button
 
 <<` """before <$appear hide="&laquo;" mode="inline" $state="inline">//I am text.//</$appear> after""">>
 
-''same as block-mode slider:''
+!! Same As Above In Block-Mode
 
 <<` """before <$appear hide="&laquo;" $state="block">//I am text.//</$appear> after""">>
 
-''same as slider with custom mode''
+!! Same As Above With Custom Mode
 
 Any non-standard mode is interpreted as //block// mode, however without applying the default slider-styles:
 
 <<` """before <$appear hide="&laquo;" mode="custom" $state="custom-block">//I am text.//</$appear> after""">>
 
-''inline slider that only shows once:''
+!! Inline Slider Only Showing Once
 
 <<` """before <$appear once mode="inline" $state="inline-once">//I am text, and you cannot hide me once you see me.//</$appear> after""">>
 
-''slider with images in the labels:''
+!! Slider With Image Buttons
 
-<<` """before <$appear show="open {{$:/core/images/chevron-right}}" hide="{{$:/core/images/chevron-left}} close" $state="slide-image-labels">
+<<` """before <$appear show="open {{$:/core/images/chevron-right}}" hide="{{$:/core/images/chevron-left}} close" $state="image-buttons">
 
 !Hello There
 
 I am text.</$appear> after""">>
 
-''simple popup with a custom label:''
+!! Popup With Custom Button
 
 <<` """before <$appear show="click to open popup" type=popup>
 
@@ -75,24 +75,24 @@ I am text.</$appear> after""">>
 
 I am text.</$appear> after""">>
 
-''one way to do a tiddler slider:''
+!! Tiddler Slider
 
 <$macrocall $name=` 
 text="""<$vars tid="GettingStarted">
-<$appear show="<$text text=<<tid>>/>" $state="slide-tiddler" mode="block">
+<$appear show="<$text text=<<tid>>/>" $state="tiddler-slider" mode="block">
 <$transclude mode="block" tiddler=<<tid>>/>
 </$appear>
 </$vars>"""/>
 
-''a popup with a list''
+!! List Popup
 
 <$macrocall $name=` 
-text="""before <$appear type="popup" $state="popup-list">
+text="""before <$appear type="popup" $state="list-popup">
 
 {{{[prefix[appear]sort[title]]}}}
 </$appear> after"""/>
 
-''another way for a tiddler slider''
+!! Tiddler Widget Tiddler Slider
 
 The next example implements custom arrows with a helper macro, wrapped using the <<x TiddlerWidget>> to set a different context.
 
@@ -107,11 +107,11 @@ text="""<$tiddler tiddler="GettingStarted">
 <$appear
 show=<<slider-label "" " {{$:/core/images/chevron-right}}">>
 hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
-$state="another-tiddler-slider">
+$state="tiddler-widget-slider">
 <$transclude mode="block"/>
 </$tiddler>"""/>
 
-''an accordion menu''
+!! Accordion Menu
 
 Making use of the above slider-label macro and another helper macro for the tooltip:
 
@@ -120,6 +120,10 @@ Making use of the above slider-label macro and another helper macro for the tool
 show/hide tiddler '$(currentTiddler)$'
 \end
 ```
+
+@@.note
+''Note:'' The key to implementing an accordion menu is to define the same ''state'' tiddler for all list items.
+@@
 
 <$macrocall $name="`" text="""<$list filter="[all[shadows]prefix[$:/plugins/tobibeer/appear/]sort[title]]">
 <$appear
@@ -130,7 +134,7 @@ state="$:/state/menu/accordion">
 </$appear><br>
 </$list>"""/>
 
-''using a handler in problem areas''
+!! Remote Popup Handler
 
 <$macrocall $name="`" text="""| <$appear show="click to show" hide="click to hide" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
 
