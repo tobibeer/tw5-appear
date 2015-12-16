@@ -1,0 +1,15 @@
+created: 20151216093701626
+creator: Tobias Beer
+modified: 20151216103119013
+modifier: Tobias Beer
+tags: $:/tags/Macro
+title: $:/.tb/macros/sliders
+type: text/vnd.tiddlywiki
+
+\define slider-label(prefix,suffix)
+@@.grey-svg $prefix$<$text text="$(currentTiddler)$"/>$suffix$@@
+\end
+
+\define slider-tooltip()
+show/hide tiddler '$(currentTiddler)$'
+\end
