@@ -15,8 +15,8 @@ Use the appear widget for popups, sliders, accordion menus
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget,
 	AppearWidget = function(parseTreeNode,options) {
-	this.initialise(parseTreeNode,options);
-};
+		this.initialise(parseTreeNode,options);
+	};
 
 /*
 Inherit from the base widget class
