@@ -31,7 +31,7 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 	this.computeAttributes();
 	this.execute();
 
-	var button,buttonClose,fallbackState,hidden,once,popButton,reveal,shown,
+	var button,buttonClose,hidden,once,popButton,reveal,shown,
 		// Will hold the child widgets
 		nodes = [];
 	// Handler instance?
@@ -64,21 +64,6 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 		reveal.attributes = this.setAttributes(reveal,"reveal");
 		// Set custom mode, if configured
 		reveal.isBlock = !(this.mode && this.mode === "inline");
-		// No state specified?
-		if(!reveal.attributes.state) {
-			// Calculate fallback state of...
-			fallbackState =
-				this.getValue(undefined,"default-state") +
-				this.currentTiddler +
-				this.getStateQualifier() + "/" +
-				(reveal.attributes.type ? reveal.attributes.type.value + "/" : "") +
-				(this.mode ? this.mode + "/" : "") +
-				(this.once ? "once/" : "") +
-				// Append state suffix, if given
-				(this.$state ? "/" + this.$state : "");
-			// Set fallback state
-			reveal.attributes.state = {type: "string",value: fallbackState};
-		}
 		// Type popup?
 		if(reveal.attributes.type && reveal.attributes.type.value === "popup") {
 			// Set button attribute for popup state
@@ -233,6 +218,19 @@ AppearWidget.prototype.execute = function() {
 	this.handler = this.attributes.handler;
 	// For that case we take these variables along
 	this.handlerVariables = (this.attributes.variables || "") + " currentTiddler";
+	// No explicit state?
+	if(!this.attr.reveal.state) {
+		// Calculate fallback state
+		this.attr.reveal.state =
+				this.getValue(undefined,"default-state") +
+				this.currentTiddler +
+				this.getStateQualifier() + "/" +
+				(this.attr.reveal.type ? this.attr.reveal.type + "/" : "") +
+				(this.mode ? this.mode + "/" : "") +
+				(this.once ? "once/" : "") +
+				// Append state suffix, if given
+				(this.$state ? "/" + this.$state : "");
+	}
 };
 
 /*
@@ -256,11 +254,15 @@ AppearWidget.prototype.refresh = function(changedTiddlers) {
 	}
 	// Any children changed?
 	if(!this.handle && this.refreshChildren(changedTiddlers)) {
-		// Refresh the appear widget => needed for lack of core support for absolute popups
-		this.refreshSelf();
+		// If we're remote handling a popup
+		if(this.attr.reveal.type === "popup" && this.handler) {
+			// HACK => needed for lack of core support for absolute popups
+			// Refresh the appear widget
+			this.refreshSelf();
+		}
 		return true;
 	} else {
-		return true;
+		return false;
 	}
 };
 
