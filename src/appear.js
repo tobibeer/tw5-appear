@@ -163,13 +163,13 @@ AppearWidget.prototype.execute = function() {
 	self.attr = {
 		// Which attributes map to which element
 		map: {
-			reveal: ["class","position","retain","state","style","tag","type"],
-			button: ["button-tag","button-class","tooltip","style"],
-			// Some attributes are duplicate, so we need to rename them later
-			rename : {
-				"button-class":"class",
-				"button-tag":"tag"
-			}
+			reveal: {"class":1,position:1,retain:1,state:1,style:1,tag:1,type:1},
+			button: {"button-tag":1,"button-class":1,tooltip:1,selectedClass:1,style:1}
+		},
+		// Some attributes are duplicate, so we need to rename them later
+		rename : {
+			"button-class":"class",
+			"button-tag":"tag"
 		},
 		// Initialize empty containers
 		button: {},
@@ -179,9 +179,10 @@ AppearWidget.prototype.execute = function() {
 	$tw.utils.each(this.attributes,function(val,key) {
 		var next;
 		// Loop mappings
-		$tw.utils.each(self.attr.map,function(attr,el) {
+		$tw.utils.each(
+			self.attr.map,function(attr,el) {
 			// Loop attributes for element
-			$tw.utils.each(attr,function(attr) {
+			$tw.utils.each(Object.keys(attr),function(attr) {
 				// Attribute for element?
 				if(attr == key) {
 					// Store attr value
@@ -237,7 +238,8 @@ AppearWidget.prototype.execute = function() {
 Selectively refreshes the widget if needed. Returns true if the widget or any of its children needed re-rendering
 */
 AppearWidget.prototype.refresh = function(changedTiddlers) {
-	var changedAttributes = this.computeAttributes();
+	var refreshed,
+		changedAttributes = this.computeAttributes();
 	// Any changed attributes?
 	if(Object.keys(changedAttributes).length) {
 		// Refresh
@@ -252,8 +254,10 @@ AppearWidget.prototype.refresh = function(changedTiddlers) {
 			return true;
 		}
 	}
+	// Check if we're refreshing children
+	refreshed = this.refreshChildren(changedTiddlers);
 	// Any children changed?
-	if(!this.handle && this.refreshChildren(changedTiddlers)) {
+	if(!this.handle && refreshed) {
 		// If we're remote handling a popup
 		if(this.attr.reveal.type === "popup" && this.handler) {
 			// HACK => needed for lack of core support for absolute popups
@@ -307,10 +311,10 @@ AppearWidget.prototype.setAttributes = function(node,element) {
 		// Initialize attributes object
 		result = {};
 	// Loop attributes defined for this element
-	$tw.utils.each(this.attr.map[element],function(attr) {
+	$tw.utils.each(Object.keys(this.attr.map[element]),function(attr) {
 		var val,
 			// Check if we needed to rename this attribute
-			name = self.attr.map.rename[attr];
+			name = self.attr.rename[attr];
 		// Not renamed?
 		if(!name) {
 			// Take attribute name as is
@@ -319,12 +323,14 @@ AppearWidget.prototype.setAttributes = function(node,element) {
 		// Read as widget value, default, or fallback
 		val = self.getValue(self.attr[element][name],attr);
 		// Class attribute? (always for the button, for the reveal only if undefined)
-		if(name === "class" && (element === "button" || val === undefined)) {
+		if(name === "class") {
 			// Construct classes
-			val = (val || "") +
-				" appear" +
-				(self.mode ? " appear-" + self.mode : "") +
-				(self.once ? " appear-once" : "");
+			val = [
+				"appear",
+				(self.mode ? "appear-" + self.mode : ""),
+				(self.once ? "appear-once" : ""),
+				(val || "")
+			].join(" ");
 		}
 		// Do we have a value?
 		if(val !== undefined) {

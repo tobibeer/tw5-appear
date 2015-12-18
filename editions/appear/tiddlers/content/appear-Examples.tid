@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151216135242009
+modified: 20151218011223578
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
@@ -11,49 +11,61 @@ type: text/vnd.tiddlywiki
 
 <<` """before <$appear>
 
-!Hello There
+! Some Heading
 
-I am text.</$appear> after""">>
+Some more text.</$appear> after""">>
 
 !! Simple Popup
 
-<<` """before <$appear type=popup>
+<<` """before <$appear type="popup">
 
-!Hello There
+! Popup
 
-I am text.</$appear> after""">>
+Clicking anywhere will close me.</$appear> after""">>
+
+@@.note
+''Note:'' The above uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
+@@
+
+!! Sticky Popup
+
+// to keep a popup open when clicking ''inside'' of it, give it the class `tc-popup-keep`//
+
+<<` """before <$appear type="popup" class="tc-popup-keep" $state="sticky">
+
+! Sticky Popup
+
+Clicking inside me will not close me.</$appear> after""">>
 
 !! Simple Slider With Custom Button
 
-The below uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
-
 <<` """before <$appear show="slide down" $state="slider-button">
 
-!Hello There
+! Sliding
 
-I am text.</$appear> after""">>
+Some content for you.</$appear> after""">>
 
 !! Simple Slider With Custom Show / Hide Buttons
 
 <<` """before <$appear show="open &raquo;" hide="&laquo; close" $state="slider-buttons">
 
-!Hello There
+! Slider Buttons
 
-I am text.</$appear> after""">>
+Can have different states.</$appear> after""">>
 
 !! Inline Slider With Custom Hide Button
 
-<<` """before <$appear hide="&laquo;" mode="inline" $state="inline">//I am text.//</$appear> after""">>
+<<` """before <$appear hide="&laquo;" mode="inline" $state="inline">//I will be shown inline.//</$appear> after""">>
 
 !! Same As Above In Block-Mode
 
-<<` """before <$appear hide="&laquo;" $state="block">//I am text.//</$appear> after""">>
+<<` """before <$appear hide="&laquo;" $state="block">//I will be shown as a block.//</$appear> after""">>
 
 !! Same As Above With Custom Mode
 
 Any non-standard mode is interpreted as //block// mode, however without applying the default slider-styles:
 
-<<` """before <$appear hide="&laquo;" mode="custom" $state="custom-block">//I am text.//</$appear> after""">>
+<<` """before <$appear hide="&laquo;" mode="custom" $state="custom-block">//And I am a "plain block".//</$appear> after""">>
 
 !! Inline Slider Only Showing Once
 
@@ -63,17 +75,17 @@ Any non-standard mode is interpreted as //block// mode, however without applying
 
 <<` """before <$appear show="open {{$:/core/images/chevron-right}}" hide="{{$:/core/images/chevron-left}} close" $state="image-buttons">
 
-!Hello There
+! Image Buttons
 
-I am text.</$appear> after""">>
+Look real nice.</$appear> after""">>
 
 !! Popup With Custom Button
 
-<<` """before <$appear show="click to open popup" type=popup>
+<<` """before <$appear show="open popup" type=popup $state="popup-button">
 
-!Hello There
+! Popups Buttons
 
-I am text.</$appear> after""">>
+Can be customized just as well.</$appear> after""">>
 
 !! Tiddler Slider
 
@@ -86,13 +98,15 @@ text="""<$vars tid="GettingStarted">
 
 !! List Popup
 
+// The below popup is also made sticky. //
+
 <$macrocall $name=` 
-text="""before <$appear type="popup" $state="list-popup">
+text="""before <$appear type="popup" $state="list-popup" class="tc-popup-keep">
 
 {{{[prefix[appear]sort[title]]}}}
 </$appear> after"""/>
 
-!! Tiddler Widget Tiddler Slider
+!! Tiddler Slider With Tiddler Widget
 
 The next example implements custom arrows with a helper macro, wrapped using the <<x TiddlerWidget>> to set a different context.
 
@@ -136,6 +150,10 @@ state="$:/state/menu/accordion">
 
 !! Remote Popup Handler
 
-<$macrocall $name="`" text="""| <$appear show="click to show" hide="click to hide" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
+<$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
+
+!! Otherwise Broken
+
+<$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="broken-popup">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
 
 </div>
