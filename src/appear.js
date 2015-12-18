@@ -31,7 +31,7 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 	this.computeAttributes();
 	this.execute();
 
-	var button,buttonClose,hidden,once,popButton,reveal,shown,
+	var cls, button,buttonClose,hidden,popButton,reveal,shown,
 		// Will hold the child widgets
 		nodes = [];
 	// Handler instance?
@@ -52,6 +52,10 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 		button = {type:"button"};
 		// Init button attributes
 		button.attributes = this.setAttributes(button,"button");
+		// Store current classes
+		cls = button.attributes["class"].value.trim();
+		// Add unselected class
+		button.attributes["class"].value = cls + " appear-show";
 		// Parse label and add to children
 		button.children = this.wiki.parseText(
 			"text/vnd.tiddlywiki",
@@ -95,6 +99,9 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 			if(!this.once) {
 				// Create hide-button as a copy of the button
 				buttonClose = $tw.utils.deepCopy(button);
+				// Add selected class
+				buttonClose.attributes["class"].value = cls + " appear-hide " +
+					(this.attr.button.selectedClass ? this.attr.button.selectedClass : "");
 				// However, resetting the state
 				buttonClose.attributes.setTo = {type: "string", value: ""};
 				// Setting the hide-button label

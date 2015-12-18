@@ -1,6 +1,6 @@
 created: 20151209181001150
 creator: Tobias Beer
-modified: 20151218035408987
+modified: 20151218155746917
 modifier: Tobias Beer
 title: appear-Attributes
 type: text/vnd.tiddlywiki
@@ -22,6 +22,7 @@ Some attributes of the ''appear'' widget directly specify its behavior while oth
 |''button-tag''|maps to the ''tag'' attribute of the button||
 |''button-class''|maps to the ''class'' attribute of the button|see [[Defaults|appear-Defaults]]|
 |''tooltip''|a tooltip applied to the button||
-|''style''|css aplied to the button||
+|''style''|css applied to the button||
+|''selectedClass''|css class applied to the button when the slider / popup is open||
 |>|>|!Reveal Attributes|
 |''class'',<br>''position'',<br>''retain'',<br>''state'',<br>''style'',<br>''tag''|see <<x RevealWidget>><br>&raquo; note that the type attribute of the reveal is explicitly handled by the appear widget||

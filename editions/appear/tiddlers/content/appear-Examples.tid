@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151218040011490
+modified: 20151218155825207
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
@@ -40,6 +40,14 @@ Clicking inside me will not close me.</$appear> after""">>
 !! Simple Slider With Custom Button
 
 <<` """before <$appear show="slide down" $state="slider-button">
+
+! Sliding
+
+Some content for you.</$appear> after""">>
+
+!! Simple Slider With Button With Selected Class
+
+<<` """before <$appear show="slide down" $state="pink-button" selectedClass="pink">
 
 ! Sliding
 
@@ -166,3 +174,9 @@ state="$:/state/menu/accordion">
 </div>"""/>
 
 </div>
+
+<style>
+button.pink {
+color:deeppink;
+}
+</style>
