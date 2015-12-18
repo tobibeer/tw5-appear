@@ -160,14 +160,14 @@ Compute the internal state of the widget
 AppearWidget.prototype.execute = function() {
 	var self = this;
 	// Attribute mapping
-	self.attr = {
+	this.attr = {
 		// Which attributes map to which element
 		map: {
 			reveal: {"class":1,position:1,retain:1,state:1,style:1,tag:1,type:1},
 			button: {"button-tag":1,"button-class":1,tooltip:1,selectedClass:1,style:1}
 		},
 		// Some attributes are duplicate, so we need to rename them later
-		rename : {
+		rename: {
 			"button-class":"class",
 			"button-tag":"tag"
 		},
@@ -321,7 +321,7 @@ AppearWidget.prototype.setAttributes = function(node,element) {
 			name = attr;
 		}
 		// Read as widget value, default, or fallback
-		val = self.getValue(self.attr[element][name],attr);
+		val = self.getValue(self.attr[element][attr],attr);
 		// Class attribute? (always for the button, for the reveal only if undefined)
 		if(name === "class") {
 			// Construct classes

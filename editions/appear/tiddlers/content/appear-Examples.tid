@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151218024945994
+modified: 20151218040011490
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
@@ -151,5 +151,18 @@ state="$:/state/menu/accordion">
 !! Remote Popup Handler
 
 <$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
+
+!! Tag Buttons
+
+// Uses column-count, a remote popup handler, and the appear widget in the custom template [[$:/.tb/templates/TagTemplate]]: //
+
+<$macrocall $name="`" text="""<div class="tb-taglist-columns">
+<$list filter="Filters Libraries Macros Plugins Widgets">
+<div class="tb-taglist-item">
+<small class="tc-menu-list-count"><$count filter="[all[current]tagging[]]"/></small>
+<$transclude tiddler="$:/.tb/templates/TagTemplate"/>
+</div>
+</$list>
+</div>"""/>
 
 </div>
