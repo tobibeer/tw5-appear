@@ -68,17 +68,8 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 		if(reveal.attributes.type && reveal.attributes.type.value === "popup") {
 			// Set button attribute for popup state
 			button.attributes.popup = reveal.attributes.state;
-			// If only shown once
-			if(this.once) {
-				// Create wrapping reveal and add button as a child
-				once = {type:"reveal",isBlock: this.block, children:[button], attributes: {
-					type: {type: "string", value: "match"},
-					state: reveal.attributes.state,
-					text: {type: "string", value: this.currentTiddler}
-				}};
-			}
 			// Add childnodes
-			nodes.push(this.once ? once : button);
+			nodes.push(button);
 			// Unless we have a deferred handler defined
 			if(!this.handler) {
 				// Push reveal to node tree

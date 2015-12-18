@@ -12,7 +12,7 @@ Some attributes of the ''appear'' widget directly specify its behavior while oth
 |''show''|the label for the button|<code>&raquo;</code><br/>see [[defaults|appear-Defaults]]|
 |''hide''|the label for the hide-button|same as ''show''|
 |''type''|to output a popup, set this attribute to `popup`<br>&raquo; if unspecified, the inner reveal will be rendered as either an inline- or block-level element, e.g. a slider||
-|''once''|when you set this keyword, the button will be hidden once the content is revealed||
+|''once''|if set, hides the button once the content is revealed<br>&raquo; not for popups||
 |''$state''|a simplified state-id appended to an already qualified default state generated for you<br>&raquo; in other words, there is no need for you to specify a complicated system tiddler path|see [[defaults|appear-Defaults]] & [[states|appear-States]]|
 |''mode''|whether or not the inner reveal is rendered in block or inline mode||
 |''handle''|specifies a handler type for an appear widget used in a placeholder template tagged ''$:/tags/PageTemplate'' to remotely output the contents of all appear widgets whose ''handler'' attribute matches the same type<br>&raquo; by default handled via the state `$:/temp/appear-handlers/<handle>`||
