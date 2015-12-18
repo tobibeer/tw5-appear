@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151218011223578
+modified: 20151218024945994
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
@@ -151,9 +151,5 @@ state="$:/state/menu/accordion">
 !! Remote Popup Handler
 
 <$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
-
-!! Otherwise Broken
-
-<$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="broken-popup">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
 
 </div>
