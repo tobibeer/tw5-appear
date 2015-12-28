@@ -14,6 +14,7 @@ Use the appear widget for popups, sliders, accordion menus
 "use strict";
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget,
+	Popup =  require("$:/core/modules/utils/dom/popup.js").Popup,
 	AppearWidget = function(parseTreeNode,options) {
 		this.initialise(parseTreeNode,options);
 	};
@@ -30,8 +31,7 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 	this.parentDomNode = parent;
 	this.computeAttributes();
 	this.execute();
-
-	var cls, button,buttonClose,hidden,popButton,reveal,shown,
+	var cls, button,buttonClose,hidden,reveal,shown,
 		// Will hold the child widgets
 		nodes = [];
 	// Handler instance?
@@ -55,7 +55,7 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 		// Store current classes
 		cls = button.attributes["class"].value.trim();
 		// Add unselected class
-		button.attributes["class"].value = cls + " appear-show";
+		button.attributes["class"].value = cls + " appear-show" + (this.handler ? " tc-popup-absolute" : "");
 		// Parse label and add to children
 		button.children = this.wiki.parseText(
 			"text/vnd.tiddlywiki",
@@ -78,6 +78,8 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 			if(!this.handler) {
 				// Push reveal to node tree
 				nodes.push(reveal);
+			} else {
+				button.attributes.handler = this.handler;
 			}
 		// Not a popup
 		} else {
@@ -139,16 +141,6 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 	if(this.handler) {
 		// Update its state
 		this.checkHandler(reveal);
-		// If we have a button
-		if(button.attributes.popup){
-			// Hack for lack of core support for absolute popup positioning....
-			/// Get the actual button instance
-			popButton = (this.once ? this.children[0][0] : this.children[0]).domNodes[0];
-			// Append (another) click handler as the one triggering an absolute popup
-			popButton.addEventListener("click",this.triggerAbsolutePopup,false);
-			// Remember the state title at the button itself
-			popButton.setAttribute("popup", button.attributes.popup.value);
-		}
 	}
 };
 
@@ -253,19 +245,7 @@ AppearWidget.prototype.refresh = function(changedTiddlers) {
 		}
 	}
 	// Check if we're refreshing children
-	refreshed = this.refreshChildren(changedTiddlers);
-	// Any children changed?
-	if(!this.handle && refreshed) {
-		// If we're remote handling a popup
-		if(this.attr.reveal.type === "popup" && this.handler) {
-			// HACK => needed for lack of core support for absolute popups
-			// Refresh the appear widget
-			this.refreshSelf();
-		}
-		return true;
-	} else {
-		return false;
-	}
+	return this.refreshChildren(changedTiddlers);
 };
 
 /*
@@ -396,27 +376,52 @@ AppearWidget.prototype.checkHandler = function(reveal) {
 };
 
 /*
-Custom click handler for a button to have a popup-reveal rendered based on an absolute position
+Hijack and overwrite core Popup show() method
+	=> required for absolute popup positioning, rather than relative
 */
-AppearWidget.prototype.triggerAbsolutePopup = function() {
-	var offset = (
+Popup.prototype.show = function(options) {
+	// The button
+	var el = options.domNode,
+		// Check if button absolutely positioned
+		absolute = (el.getAttribute("class") || "").indexOf("tc-popup-absolute" >= 0),
+		// Find out what was clicked on
+		info = this.popupInfo(el),
 		// Helper to calculate the absolte offset
-		function(element) {
+		calcAbsoluteOffset = function(el) {
 			var left = 0,top = 0;
 			do {
-				top += element.offsetTop  || 0;
-				left += element.offsetLeft || 0;
-				element = element.offsetParent;
-			} while(element);
+				top += el.offsetTop  || 0;
+				left += el.offsetLeft || 0;
+				el = el.offsetParent;
+			} while(el);
 			return {left:left,top:top};
-		})(this);
+		},
+		offset = {
+			left: el.offsetLeft,
+			top: el.offsetTop
+		};
+	// Cancel any higher level popups
+	this.cancel(info.popupLevel);
+	// Store the popup details
+	this.popups.push({
+		title: options.title,
+		wiki: options.wiki,
+		domNode: el
+	});
+	// Calculate absolute offset?
+	offset = absolute ? calcAbsoluteOffset(el) : offset;
 	// Set the state tiddler
-	$tw.wiki.setTextReference(
-		// Read state tiddler from the button
-		this.getAttribute("popup"),
-		// Write offset coordinates to state tiddler
-		"(" + offset.left + "," + offset.top + "," + this.offsetWidth + "," + this.offsetHeight + ")"
+	options.wiki.setTextReference(
+		options.title,
+		"(" + offset.left +
+  		"," + offset.top +
+	  	"," + el.offsetWidth +
+	  	"," + el.offsetHeight + ")"
 	);
+	// Add the click handler if we have any popups
+	if(this.popups.length > 0) {
+		this.rootElement.addEventListener("click",this,true);
+	}
 };
 
 // Now we got a widget ready for use
