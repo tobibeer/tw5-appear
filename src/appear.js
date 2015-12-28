@@ -383,7 +383,7 @@ Popup.prototype.show = function(options) {
 	// The button
 	var el = options.domNode,
 		// Check if button absolutely positioned
-		absolute = (el.getAttribute("class") || "").indexOf("tc-popup-absolute" >= 0),
+		absolute = (el.getAttribute("class") || "").indexOf("tc-popup-absolute") >= 0,
 		// Find out what was clicked on
 		info = this.popupInfo(el),
 		// Helper to calculate the absolte offset
