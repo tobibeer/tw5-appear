@@ -1,6 +1,6 @@
 created: 20151209180941139
 creator: Tobias Beer
-modified: 20151218035422612
+modified: 20151229094127992
 modifier: Tobias Beer
 title: appear-Info
 type: text/vnd.tiddlywiki
@@ -12,4 +12,6 @@ The ''appear'' widget displays a button which when clicked reveals hidden conten
 * accordion ''menus''
 * interactive ''stories''
 
-Under the hood, there is at least one <<x ButtonWidget>> and one <<x RevealWidget>> it creates which may be wrapped in further elements, e.g. more reveal widgets, as needed, so as to achieve the desired output.
+Under the hood, there is at least one <<x ButtonWidget>> and one <<x RevealWidget>> created by the appear widget which may be further wrapped in more reveal widgets, as needed, so as to achieve the desired output.
+
+<<plugin-docs-cp appear>>

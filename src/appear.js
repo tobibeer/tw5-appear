@@ -319,6 +319,7 @@ AppearWidget.prototype.setAttributes = function(node,element) {
 			// Construct classes
 			val = [
 				"appear",
+				"appear-" + element,
 				(self.mode ? "appear-" + self.mode : ""),
 				(self.once ? "appear-once" : ""),
 				(val || "")

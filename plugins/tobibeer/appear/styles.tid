@@ -13,9 +13,9 @@ tags: $:/tags/Stylesheet
 	padding: 0 1em;
 	background: <<colour background>>;
 }
-.tc-reveal.appear-inline{
+.appear-reveal.appear-inline{
 margin-left:5px;
 }
-.tc-reveal.appear-inline.appear-once{
+.appear-reveal.appear-inline.appear-once{
 margin-left:0;
 }</pre>

@@ -1,14 +1,14 @@
 created: 20151209181001150
 creator: Tobias Beer
-modified: 20151218155746917
+modified: 20151229094011629
 modifier: Tobias Beer
 title: appear-Attributes
 type: text/vnd.tiddlywiki
 
 Some attributes of the ''appear'' widget directly specify its behavior while others map to the corresponding <<x ButtonWidget>> or <<x RevealWidget>> it creates:
 
-|!Name |!Description |!Default |
-|>|>|!Globals |
+| !Name | !Description | !Default |
+|>|>| !Globals |
 |''show''|the label for the button|<code>&raquo;</code><br/>see [[defaults|appear-Defaults]]|
 |''hide''|the label for the hide-button|same as ''show''|
 |''type''|to output a popup, set this attribute to `popup`<br>&raquo; if unspecified, the inner reveal will be rendered as either an inline- or block-level element, e.g. a slider||
@@ -18,11 +18,12 @@ Some attributes of the ''appear'' widget directly specify its behavior while oth
 |''handle''|specifies a handler type for an appear widget used in a placeholder template tagged ''$:/tags/PageTemplate'' to remotely output the contents of all appear widgets whose ''handler'' attribute matches the same type<br>&raquo; by default handled via the state `$:/temp/appear-handlers/<handle>`||
 |''handler''|specifies the handler type of the remote appear widget that is configured to ''handle'' this appear widget's inner reveal||
 |''variables''|should you have specified a remote ''handler'', specify context variables you wish preserved for the inner reveal as it is rendered in a different context|`currentTiddler`|
-|>|>|!Button Attributes|
-|''button-tag''|maps to the ''tag'' attribute of the button||
+|>|>| ![[Button Attributes|http://tiddlywiki.com/#ButtonWidget]] |
 |''button-class''|maps to the ''class'' attribute of the button|see [[Defaults|appear-Defaults]]|
-|''tooltip''|a tooltip applied to the button||
-|''style''|css applied to the button||
-|''selectedClass''|css class applied to the button when the slider / popup is open||
-|>|>|!Reveal Attributes|
-|''class'',<br>''position'',<br>''retain'',<br>''state'',<br>''style'',<br>''tag''|see <<x RevealWidget>><br>&raquo; note that the type attribute of the reveal is explicitly handled by the appear widget||
+|''button-style''|maps to the ''style'' attribute of the button|~|
+|''button-tag''|maps to the ''tag'' attribute of the button|~|
+|''tooltip''|a tooltip applied to the button|~|
+|''style''|css applied to the button|~|
+|''selectedClass''|css class applied to the button when the slider / popup is open|~|
+|>|>| ![[Reveal Attributes|http://tiddlywiki.com/#RevealWidget]] |
+|''class'',<br>''position'',<br>''retain'',<br>''state'',<br>''style'',<br>''tag''|see <<x RevealWidget>><br>&raquo; note that the type attribute of the reveal is explicitly handled by the appear widget|see [[Defaults|appear-Defaults]]|

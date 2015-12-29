@@ -1,9 +1,28 @@
 created: 20151216094336360
 creator: Tobias Beer
-modified: 20151216094449945
+modified: 20151229093643685
 modifier: Tobias Beer
 tags: 
 title: appear-Styles
 type: text/vnd.tiddlywiki
 
 The default styles for the appear-widget are defined in <<source "$:/plugins/tobibeer/appear/styles">>
+
+ !! CSS Classes
+
+The following css classes are automatically set by the appear widget:
+
+; appear
+: set at all buttons or reveals created by the appear widget
+; appear-button
+: set at each button widget to trigger an appear popup or slider
+; appear-reveal
+: set at each reveal widget being the popup or slider
+; appear-inline, appear-block
+: set at both button and reveal depending on the specified mode
+; appear-show
+: set at the button widget that opens the slider
+; appear-hide
+: set at the button widget that closes the slider
+; appear-once
+: set at both button and reveal when an appear widget is specified to only show the button once
