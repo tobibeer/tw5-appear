@@ -1,8 +1,13 @@
-title: appear-Install
 created: 20151209181007989
 creator: Tobias Beer
-modified: 20151209181028212
+modified: 20151229102859631
+modifier: Tobias Beer
+title: appear-Install
+type: text/vnd.tiddlywiki
 
 <<plugin-install appear>>
 
 !! Version History
+
+; 0.5.5 / 2015-12-29
+: initial release
