@@ -7,7 +7,7 @@ This plugin provides the ''$appear'' widget that can render popups and sliders (
 : set to `popup` to have the content appear as a popup
 ; show
 : the button label
-: hide
+; hide
 : the hide button label
 ; mode
 : either `block` or `inline`, with respect to the inner content
