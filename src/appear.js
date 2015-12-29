@@ -153,12 +153,27 @@ AppearWidget.prototype.execute = function() {
 	this.attr = {
 		// Which attributes map to which element
 		map: {
-			reveal: {"class":1,position:1,retain:1,state:1,style:1,tag:1,type:1},
-			button: {"button-tag":1,"button-class":1,tooltip:1,selectedClass:1,style:1}
+			reveal: {
+				"class":1,
+				position:1,
+				retain:1,
+				state:1,
+				style:1,
+				tag:1,
+				type:1
+			},
+			button: {
+				"button-class":1,
+				"button-style":1,
+				"button-tag":1,
+				tooltip:1,
+				selectedClass:1
+			}
 		},
-		// Some attributes are duplicate, so we need to rename them later
+		// Rename duplicate attributes later
 		rename: {
 			"button-class":"class",
+			"button-style":"style",
 			"button-tag":"tag"
 		},
 		// Initialize empty containers
@@ -228,8 +243,7 @@ AppearWidget.prototype.execute = function() {
 Selectively refreshes the widget if needed. Returns true if the widget or any of its children needed re-rendering
 */
 AppearWidget.prototype.refresh = function(changedTiddlers) {
-	var refreshed,
-		changedAttributes = this.computeAttributes();
+	var changedAttributes = this.computeAttributes();
 	// Any changed attributes?
 	if(Object.keys(changedAttributes).length) {
 		// Refresh
