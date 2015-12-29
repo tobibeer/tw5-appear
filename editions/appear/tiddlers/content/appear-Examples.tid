@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20151218155825207
+modified: 20151229174147607
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
@@ -15,6 +15,10 @@ type: text/vnd.tiddlywiki
 
 Some more text.</$appear> after""">>
 
+@@.note
+''Note:'' The <<x StateMechanism state>> is automatically qualified for you and sufficient for most use cases.
+@@
+
 !! Simple Popup
 
 <<` """before <$appear type="popup">
@@ -22,10 +26,6 @@ Some more text.</$appear> after""">>
 ! Popup
 
 Clicking anywhere will close me.</$appear> after""">>
-
-@@.note
-''Note:'' The above uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
-@@
 
 !! Sticky Popup
 
@@ -36,6 +36,10 @@ Clicking anywhere will close me.</$appear> after""">>
 ! Sticky Popup
 
 Clicking inside me will not close me.</$appear> after""">>
+
+@@.note
+''Note:'' The above uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
+@@
 
 !! Simple Slider With Custom Button
 
