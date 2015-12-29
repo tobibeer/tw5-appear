@@ -1,6 +1,6 @@
 created: 20151209181007989
 creator: Tobias Beer
-modified: 20151229102859631
+modified: 20151229173345364
 modifier: Tobias Beer
 title: appear-Install
 type: text/vnd.tiddlywiki
@@ -9,5 +9,7 @@ type: text/vnd.tiddlywiki
 
 !! Version History
 
+; 0.5.7 / 2015-12-29
+: non-functional fixes to readme
 ; 0.5.5 / 2015-12-29
 : initial release
