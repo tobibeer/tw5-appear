@@ -1,6 +1,6 @@
 created: 20151216073014999
 creator: Tobias Beer
-modified: 20151216133523351
+modified: 20160106224029815
 modifier: Tobias Beer
 tags: 
 title: appear-Modes
@@ -19,34 +19,18 @@ Notice, however, that using inline mode will not necessarily display all content
 
 Here's what setting different modes will do to the same text:
 
-''none''
-
-<<` """before <$appear>
-
-! Hello There
-
-I am text.</$appear> after""">>
-
 ''block''
 
-<<` """before <$appear mode="block">
-
-!Hello There
-
-I am text.</$appear> after""">>
+<<` """before <$appear mode="block">text</$appear> after""">>
 
 ''inline''
 
-<<` """before <$appear mode="inline">
-
-! Hello There
-
-I am text.</$appear> after""">>
+<<` """before <$appear mode="inline">text</$appear> after""">>
 
 ''custom''
 
-<<` """before <$appear mode="custom">
+<<` """before <$appear mode="custom">text</$appear> after""">>
 
-! Hello There
+''none'' — same as ''block''
 
-I am text.</$appear> after""">>
+<<` """before <$appear $state="none">text</$appear> after""">>
