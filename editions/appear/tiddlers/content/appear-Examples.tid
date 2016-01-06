@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20160106210803825
+modified: 20160106211131680
 modifier: Tobias Beer
 title: appear-Examples
 type: text/vnd.tiddlywiki
@@ -168,6 +168,36 @@ state="$:/state/menu/accordion">
 
 <$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
 
+!! Tiddler Popups
+
+// Lists the node commands and opens the help tiddlers as sticky popups rendered into the global popup handler so as to not cut the popups off at the right tiddler margin.//
+
+```
+; Node Commands
+: <$list filter="[all[shadows]prefix[$:/language/Help]sort[title]]">
+<$appear
+type="popup"
+class="tc-popup-keep max800"
+show="""<$list filter"[all[current]removeprefix[$:/language/Help/]]">{{!!title}}</$list>""">
+<$transclude mode="block"/>
+</$appear> &nbsp;
+</$list><style>.max800 {max-width:800px;}</style>
+```
+
+<<<
+
+; Node Commands
+: <$list filter="[all[shadows]prefix[$:/language/Help]sort[title]]">
+<$appear
+type="popup"
+handler="popups"
+class="tc-popup-keep max600"
+show="""<$set name="title" filter="[all[current]removeprefix[$:/language/Help/]]"><<title>></$set>""">
+<$transclude mode="block"/>
+</$appear> &nbsp;
+</$list><style>.max600 {max-width:600px;}</style>
+<<<
+
 !! Tag Buttons
 
 // Uses column-count, a remote popup handler, and the appear widget in the custom template [[$:/.tb/templates/TagTemplate]]: //
@@ -192,32 +222,3 @@ color:deeppink;
 @@.note
 ''Note:'' The popups of the above example would be cut-off at the column edge without using the handler attribute, e.g. if using the core <<x PopupMechanism>> alone.
 @@
-
-!! Tiddler Popups
-
-// Lists the node commands and opens the help tiddlers as sticky popups rendered into the global popup handler so as to not cut the popups off at the right tiddler margin.//
-
-```
-; Node Commands
-: <$list filter="[all[shadows]prefix[$:/language/Help]sort[title]]">
-<$appear
-type="popup"
-class="tc-popup-keep max800"
-show="""<$list filter"[all[current]removeprefix[$:/language/Help/]]">{{!!title}}</$list>""">
-<$transclude mode="block"/>
-</$appear> &nbsp;
-</$list><style>.max800 {max-width:800px;}</$style>
-```
-
-<<<
-
-; Node Commands
-: <$list filter="[all[shadows]prefix[$:/language/Help]sort[title]]"><$appear
-type="popup"
-handler="popups"
-class="tc-popup-keep max600"
-show="""<$set name="title" filter="[all[current]removeprefix[$:/language/Help/]]"><<title>></$set>""">
-<$transclude mode="block"/>
-</$appear> &nbsp;
-</$list><style>.max600 {max-width:600px;}</$style>
-<<<
