@@ -1,7 +1,9 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20160106211131680
+modified: 20160107120506793
 modifier: Tobias Beer
+summary: examples for the [[appear]] widget
+tags: appear Examples
 title: appear-Examples
 type: text/vnd.tiddlywiki
 
@@ -120,105 +122,8 @@ text="""before <$appear type="popup" $state="list-popup" class="tc-popup-keep">
 ''Note:'' The above popup is also made sticky via `tc-popup-keep`.
 @@
 
-!! Tiddler Slider With Tiddler Widget
-
-// Implements custom arrows with a helper macro, wrapped using the <<x TiddlerWidget>> to set a different context://
-
-```
-\define slider-label(prefix,suffix)
-@@.grey-svg $prefix$<$text text="$(currentTiddler)$"/>$suffix$@@
-\end
-```
-
-<$macrocall $name=` 
-text="""<$tiddler tiddler="GettingStarted">
-<$appear
-show=<<slider-label "" " {{$:/core/images/chevron-right}}">>
-hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
-$state="tiddler-widget-slider">
-<$transclude mode="block"/>
-</$tiddler>"""/>
-
-!! Accordion Menu
-
-//Making use of the above slider-label macro and another helper macro for the tooltip://
-
-```
-\define slider-tooltip()
-show/hide tiddler '$(currentTiddler)$'
-\end
-```
-
-@@.note
-''Note:'' The key to implementing an accordion menu is to define the same ''state'' tiddler for all list items.
-@@
-
-<$macrocall $name="`" text="""<$list filter="[all[shadows]prefix[$:/plugins/tobibeer/appear/]sort[title]]">
-<$appear
-show=<<slider-label>>
-tooltip=<<slider-tooltip>>
-state="$:/state/menu/accordion">
-<$transclude mode="block"/>
-</$appear><br>
-</$list>"""/>
-
 !! Remote Popup Handler
 
 // Actually renders the popup into the <<x SystemTags PageTemplate>> [[$:/.tb/ui/PageTemplate/popups]]://
 
 <$macrocall $name="`" text="""| <$appear show="click to show" type="popup" $state="popups-handler" handler="popups">I [[appear]] when you tell me to.</$appear> |eenie meenie miney mo |eenie meenie miney mo <br/><br/> |"""/>
-
-!! Tiddler Popups
-
-// Lists the node commands and opens the help tiddlers as sticky popups rendered into the global popup handler so as to not cut the popups off at the right tiddler margin.//
-
-```
-; Node Commands
-: <$list filter="[all[shadows]prefix[$:/language/Help]sort[title]]">
-<$appear
-type="popup"
-class="tc-popup-keep max800"
-show="""<$list filter"[all[current]removeprefix[$:/language/Help/]]">{{!!title}}</$list>""">
-<$transclude mode="block"/>
-</$appear> &nbsp;
-</$list><style>.max800 {max-width:800px;}</style>
-```
-
-<<<
-
-; Node Commands
-: <$list filter="[all[shadows]prefix[$:/language/Help]sort[title]]">
-<$appear
-type="popup"
-handler="popups"
-class="tc-popup-keep max600"
-show="""<$set name="title" filter="[all[current]removeprefix[$:/language/Help/]]"><<title>></$set>""">
-<$transclude mode="block"/>
-</$appear> &nbsp;
-</$list><style>.max600 {max-width:600px;}</style>
-<<<
-
-!! Tag Buttons
-
-// Uses column-count, a remote popup handler, and the appear widget in the custom template [[$:/.tb/templates/TagTemplate]]: //
-
-<$macrocall $name="`" text="""<div class="tb-taglist-columns">
-<$list filter="Filters Libraries Macros Plugins Widgets">
-<div class="tb-taglist-item">
-<small class="tc-menu-list-count"><$count filter="[all[current]tagging[]]"/></small>
-<$transclude tiddler="$:/.tb/templates/TagTemplate"/>
-</div>
-</$list>
-</div>"""/>
-
-</div>
-
-<style>
-button.pink {
-color:deeppink;
-}
-</style>
-
-@@.note
-''Note:'' The popups of the above example would be cut-off at the column edge without using the handler attribute, e.g. if using the core <<x PopupMechanism>> alone.
-@@

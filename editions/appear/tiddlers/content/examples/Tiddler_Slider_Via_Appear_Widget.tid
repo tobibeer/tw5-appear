@@ -1,0 +1,25 @@
+created: 20160107115519151
+creator: Tobias Beer
+modified: 20160107115649692
+modifier: Tobias Beer
+summary: creates a slider revealing a tiddler using the [[appear]] widget
+tags: Examples appear
+title: Tiddler Slider Via Appear Widget
+type: text/vnd.tiddlywiki
+
+Implements custom arrows with a helper macro, wrapped using the <<x TiddlerWidget>> to set a different context:
+
+```
+\define slider-label(prefix,suffix)
+@@.grey-svg $prefix$<$text text="$(currentTiddler)$"/>$suffix$@@
+\end
+```
+
+<$macrocall $name=` 
+text="""<$tiddler tiddler="GettingStarted">
+<$appear
+show=<<slider-label "" " {{$:/core/images/chevron-right}}">>
+hide=<<slider-label "" " {{$:/core/images/chevron-down}}">>
+$state="tiddler-widget-slider">
+<$transclude mode="block"/>
+</$tiddler>"""/>
