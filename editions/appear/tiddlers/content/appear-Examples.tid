@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20160107120506793
+modified: 20160120071231991
 modifier: Tobias Beer
 summary: examples for the [[appear]] widget
 tags: appear Examples
@@ -25,19 +25,23 @@ Some more text.</$appear> after""">>
 
 <<` """before <$appear type="popup">
 
-! Popup
+! I Am Sticky
 
-Clicking anywhere will close me.</$appear> after""">>
+Clicking anywhere outside will close me.</$appear> after""">>
 
-!! Sticky Popup
+@@.note
+By [[default|appear-Defaults]], all popups created by <<tb appear>> are "sticky". Meaning: they do not close if you click inside the popup.
+@@
 
-// to keep a popup open when clicking ''inside'' of it, give it the class `tc-popup-keep`//
+!! Non-Sticky Popup
 
-<<` """before <$appear type="popup" class="tc-popup-keep" $state="sticky">
+// to make a popup non-sticky set the attribute ''keep'' to anything but `yes` or `true`.//
 
-! Sticky Popup
+<<` """before <$appear type="popup" keep="no" $state="sticky">
 
-Clicking inside me will not close me.</$appear> after""">>
+! Non-Sticky Popup
+
+I will close as well when you click inside me.</$appear> after""">>
 
 @@.note
 ''Note:'' The above uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
@@ -58,6 +62,8 @@ Some content for you.</$appear> after""">>
 ! Sliding
 
 Some content for you.</$appear> after""">>
+
+<style>button.pink {color:deeppink}</style>
 
 !! Simple Slider With Custom Show / Hide Buttons
 
