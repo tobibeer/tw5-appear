@@ -1,6 +1,6 @@
 created: 20151216082358246
 creator: Tobias Beer
-modified: 20160120062843330
+modified: 20160120074120716
 modifier: Tobias Beer
 title: appear-Defaults
 type: text/vnd.tiddlywiki
@@ -17,7 +17,7 @@ The appear widget allows to define attribute defaults for __all instances__ usin
 
 <$list filter="[all[shadows]prefix[$:/plugins/tobibeer/appear/defaults/]sort[title]]">
 <$appear
-show=<<slider-label>>
+show=<<slider-label suffix:""" <$link>&raquo;</$link>""">>
 tooltip=<<slider-tooltip>>
 state="$:/state/menu/accordion">
 <$transclude mode="block"/>
