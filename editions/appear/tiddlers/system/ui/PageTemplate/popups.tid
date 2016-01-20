@@ -1,13 +1,13 @@
 created: 20151213164950678
 creator: Tobias Beer
 list-before: 
-modified: 20151215105433814
+modified: 20160118214157571
 modifier: Tobias Beer
 tags: $:/tags/PageTemplate
 title: $:/.tb/ui/PageTemplate/popups
 type: text/vnd.tiddlywiki
 
-<div class="tc-popups">
+<div class="tc-popups" style="position:relative">
 
 <$appear handle="popups"/>
 

@@ -18,9 +18,12 @@ This plugin provides the ''$appear'' widget that can render popups and sliders (
 : the widget calculates a state for you, use this to append a simple id
 ; state
 : alternatively, specify a fully qualified state
-; handle / handler
+; keep
+: make popups sticky when `yes` or `true`
+; handle / handler / variables
 : allows to take the popup contents out of the flow and render them elsewhere on the page
 : required to properly create popups in table cells and other constained elements
+: specify variables to take along
 
 <br>
 

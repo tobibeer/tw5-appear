@@ -14,10 +14,10 @@ Use the appear widget for popups, sliders, accordion menus
 "use strict";
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget,
-	Popup =  require("$:/core/modules/utils/dom/popup.js").Popup,
 	AppearWidget = function(parseTreeNode,options) {
 		this.initialise(parseTreeNode,options);
-	};
+	},
+	handlerCache = {};
 
 /*
 Inherit from the base widget class
@@ -29,23 +29,18 @@ Render this widget into the DOM
 */
 AppearWidget.prototype.render = function(parent,nextSibling) {
 	this.parentDomNode = parent;
+	this.nextSibling = nextSibling;
 	this.computeAttributes();
 	this.execute();
-	var cls, button,buttonClose,hidden,reveal,shown,
+	var cls,button,buttonClose,hidden,reveal,shown,
 		// Will hold the child widgets
 		nodes = [];
 	// Handler instance?
 	if(this.handle) {
-		// Get the handler state
-		this.handlerState = this.checkHandler();
-		// Loop registered instances
-		$tw.utils.each(
-			this.handlerState,
-			function(reveal) {
-				// Push parseTree stored at state
-				nodes.push(reveal);
-			}
-		);
+		// Recreate cache
+		this.getHandlerCache(this.handle,1);
+		// Handle refreshes
+		this.refreshHandler();
 	// Regular instance
 	} else {
 		// Create button
@@ -132,15 +127,15 @@ AppearWidget.prototype.render = function(parent,nextSibling) {
 			// Add wrapping reveals to output
 			nodes.push(hidden,shown);
 		}
-	}
-	// Construct the child widgets
-	this.makeChildWidgets(nodes);
-	// Render into the dom
-	this.renderChildren(this.parentDomNode,nextSibling);
-	// Now, do we have a remote handler?
-	if(this.handler) {
-		// Update its state
-		this.checkHandler(reveal);
+		// Construct the child widgets
+		this.makeChildWidgets(nodes);
+		// Render into the dom
+		this.renderChildren(this.parentDomNode,nextSibling);
+		// Now, do we have a remote handler?
+		if(this.handler) {
+			// Update its state
+			this.addToHandlerCache(reveal);
+		}
 	}
 };
 
@@ -224,6 +219,10 @@ AppearWidget.prototype.execute = function() {
 	this.handler = this.attributes.handler;
 	// For that case we take these variables along
 	this.handlerVariables = (this.attributes.variables || "") + " currentTiddler";
+	// Whether or not to keep popups
+	this.keep = ["yes","true"].indexOf(
+			(this.getValue(this.attributes.keep,"keep")||"").toLocaleLowerCase()
+		) >- 1;
 	// No explicit state?
 	if(!this.attr.reveal.state) {
 		// Calculate fallback state
@@ -249,14 +248,11 @@ AppearWidget.prototype.refresh = function(changedTiddlers) {
 		// Refresh
 		this.refreshSelf();
 		return true;
-	// Is this a handler instance?
-	} else if(this.handle) {
-		// Has the handler-state changed?
-		if(this.handlerState != this.checkHandler()) {
-			// Refresh
-			this.refreshSelf();
-			return true;
-		}
+	}
+	// Global handler?
+	if(this.handle) {
+		// Handle refreshes
+		this.refreshHandler();
 	}
 	// Check if we're refreshing children
 	return this.refreshChildren(changedTiddlers);
@@ -296,7 +292,8 @@ AppearWidget.prototype.getValue = function(value,attr){
 };
 
 /*
-Set child-widget attributes for a given element, depending on the parsed widget attributes
+Set child-widget attributes for a given element,
+depending on the parsed widget attributes
 */
 AppearWidget.prototype.setAttributes = function(node,element) {
 	var self = this,
@@ -320,6 +317,7 @@ AppearWidget.prototype.setAttributes = function(node,element) {
 			val = [
 				"appear",
 				"appear-" + element,
+				(element === "reveal" && self.keep ? "tc-popup-keep" : ""),
 				(self.mode ? "appear-" + self.mode : ""),
 				(self.once ? "appear-once" : ""),
 				(val || "")
@@ -343,99 +341,104 @@ AppearWidget.prototype.setAttributes = function(node,element) {
 };
 
 /*
-Checks and updates the state for a reveal widget handling remote content
+Retrieves handler cache, creates if not existing or told to
 */
-AppearWidget.prototype.checkHandler = function(reveal) {
-	var vars,
-		state = {},
-		self = this,
-		// Construct default handler state (not persisted)
-		handler = "$:/temp/appear-handlers/" + (this.handler || this.handle),
-		// Fetch state tiddler
-		stateTiddler = this.wiki.getTiddler(handler);
-	// Got a state?
-	if(stateTiddler) {
-		// Parse it as an object
-		state = JSON.parse(stateTiddler.getFieldString("text") || "{}");
+AppearWidget.prototype.getHandlerCache = function(handler,create) {
+	// Retrieve cache for handler
+	var cache = handlerCache[handler];
+	// If not existing or asked to be created
+	if(!cache || create){
+		// Create new cache for handler
+		handlerCache[handler] = {
+			// For these states
+			handled: {},
+			// Refresh list
+			handle: {}
+		};
+		cache = handlerCache[handler];
 	}
-	// Is this a call for updating the state by a widget defining a handler?
-	if(this.handler) {
-		// Create vars widget wrapper containing the reveal
-		vars = {type:"vars", children:[reveal], attributes:{}};
-		// Loop
-		$tw.utils.each(
-			// Handler variables
-			(this.handlerVariables || "").split(" "),
-			function(v) {
-				// No empty strings
-				v = v.trim();
-				if(v){
-					// store variable as vars widget attribute by...
-					vars.attributes[v] = {
-						type: "string",
-						// Fetching the current variable value
-						value: (self.getVariable(v) || "").toString()};
-				}
-			}
-		);
-		// If the state for this reveal has changed
-		if(state[reveal.attributes.state.value] !== vars) {
-			// Write this reveal to the state
-			state[reveal.attributes.state.value] = vars;
-			// Write the handler state
-			self.wiki.setText(handler,"text",undefined,JSON.stringify(state));
-		}
-	}
-	// Return object containing parseTreeNodes indexed by state
-	return state;
+	return cache;
 };
 
 /*
-Hijack and overwrite core Popup show() method
-	=> required for absolute popup positioning, rather than relative
+Retrieve notifier list for global handler and create contents accordingly
 */
-Popup.prototype.show = function(options) {
-	// The button
-	var el = options.domNode,
-		// Check if button absolutely positioned
-		absolute = (el.getAttribute("class") || "").indexOf("tc-popup-absolute") >= 0,
-		// Find out what was clicked on
-		info = this.popupInfo(el),
-		// Helper to calculate the absolte offset
-		calcAbsoluteOffset = function(el) {
-			var left = 0,top = 0;
-			do {
-				top += el.offsetTop  || 0;
-				left += el.offsetLeft || 0;
-				el = el.offsetParent;
-			} while(el);
-			return {left:left,top:top};
-		},
-		offset = {
-			left: el.offsetLeft,
-			top: el.offsetTop
-		};
-	// Cancel any higher level popups
-	this.cancel(info.popupLevel);
-	// Store the popup details
-	this.popups.push({
-		title: options.title,
-		wiki: options.wiki,
-		domNode: el
+AppearWidget.prototype.refreshHandler = function() {
+	var self = this,
+		// Get cache for handler
+		cache = this.getHandlerCache(this.handle),
+		// Load refresh items from global cache for handler
+		handle = cache.handle;
+	// Got anything to handle?
+	if(Object.keys(handle).length) {
+		// Loop refresh handles
+		$tw.utils.each(handle, function(node,state) {
+			// Remove existing child node
+			self.removeChildNode(state);
+			// Render as child node
+			self.children.push(self.makeChildWidget(node));
+			// Rrnder child
+			self.children[self.children.length - 1].render(self.parentDomNode,self.nextSibling);
+		});
+		// Remove entries
+		handlerCache[this.handle].handle = {};
+	}
+};
+
+/*
+Removes a child node of a handler for a given state
+*/
+AppearWidget.prototype.removeChildNode = function(state) {
+	var self = this;
+	// Loop all child widgets of handler
+	$tw.utils.each(this.children, function(node,index) {
+		// Same state?
+		if(node.children[0].state === state) {
+			// Remove any domNodes
+			node.removeChildDomNodes();
+			// Delete child widget
+			self.children.splice(index);
+			// Done
+			return false;
+		}
 	});
-	// Calculate absolute offset?
-	offset = absolute ? calcAbsoluteOffset(el) : offset;
-	// Set the state tiddler
-	options.wiki.setTextReference(
-		options.title,
-		"(" + offset.left +
-  		"," + offset.top +
-	  	"," + el.offsetWidth +
-	  	"," + el.offsetHeight + ")"
+};
+
+/*
+Checks and updates the state for a reveal widget handling remote content
+*/
+AppearWidget.prototype.addToHandlerCache = function(reveal) {
+	var self = this,
+		// Only one per state
+		state = reveal.attributes.state.value,
+		// Retrieve cache for handler
+		cache = this.getHandlerCache(this.handler),
+		// Retrieve parseTree for state as cached for the handler
+		cached = cache.handled[state],
+		// Create vars widget wrapper containing the reveal
+		vars = {type:"vars", children:[reveal], attributes:{}};
+	// Loop
+	$tw.utils.each(
+		// Handler variables
+		(this.handlerVariables || "").split(" "),
+		function(v) {
+			// No empty strings
+			v = v.trim();
+			if(v){
+				// Store variable as vars widget attribute by...
+				vars.attributes[v] = {
+					type: "string",
+					// Fetching the current variable value
+					value: (self.getVariable(v) || "").toString()};
+			}
+		}
 	);
-	// Add the click handler if we have any popups
-	if(this.popups.length > 0) {
-		this.rootElement.addEventListener("click",this,true);
+	// If the state for this reveal is not the cached one
+	if(vars !== cached) {
+		// Add to refresh list, picked up by handler
+		cache.handle[state] = vars;
+		// Trigger refresh by writing to dummy temp tiddler for handler
+		this.wiki.setText("$:/temp/appear-handler/"+this.handler,"text",undefined,state);
 	}
 };
 

@@ -1,6 +1,0 @@
-title: $:/plugins/tobibeer/appear/defaults/
-
-show: »
-mode: block
-button-class: tc-btn-invisible tc-tiddlylink
-default-state: $:/temp/appear/

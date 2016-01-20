@@ -1,6 +1,6 @@
 created: 20151209181001150
 creator: Tobias Beer
-modified: 20151229094011629
+modified: 20160120055111736
 modifier: Tobias Beer
 title: appear-Attributes
 type: text/vnd.tiddlywiki
@@ -9,13 +9,14 @@ Some attributes of the ''appear'' widget directly specify its behavior while oth
 
 | !Name | !Description | !Default |
 |>|>| !Globals |
-|''show''|the label for the button|<code>&raquo;</code><br/>see [[defaults|appear-Defaults]]|
+|''show''|the label for the button|<code>{{$:/plugins/tobibeer/appear/defaults/show}}</code><br/>see [[defaults|appear-Defaults]]|
 |''hide''|the label for the hide-button|same as ''show''|
-|''type''|to output a popup, set this attribute to `popup`<br>&raquo; if unspecified, the inner reveal will be rendered as either an inline- or block-level element, e.g. a slider||
-|''once''|if set, hides the button once the content is revealed<br>&raquo; not for popups||
-|''$state''|a simplified state-id appended to an already qualified default state generated for you<br>&raquo; in other words, there is no need for you to specify a complicated system tiddler path|see [[defaults|appear-Defaults]] & [[states|appear-States]]|
+|''type''|for a popup, set to `popup`<br>&raquo; if unspecified, the inner reveal will be rendered as either an inline- or block-level element, e.g. a slider||
+|''once''|if set, hides the button once the content is revealed (not for popups)||
+|''$state''|a simplified state-id appended to an already qualified default state generated for you<br>&raquo; in other words, there is no need for you to specify a complicated system tiddler path|<code><$text text={{$:/plugins/tobibeer/appear/defaults/default-state}}/>...<br/></code>see [[defaults|appear-Defaults]] & [[states|appear-States]]|
 |''mode''|whether or not the inner reveal is rendered in block or inline mode||
-|''handle''|specifies a handler type for an appear widget used in a placeholder template tagged ''$:/tags/PageTemplate'' to remotely output the contents of all appear widgets whose ''handler'' attribute matches the same type<br>&raquo; by default handled via the state `$:/temp/appear-handlers/<handle>`||
+|''keep''|when set to `yes` or `true`, makes a popup sticky so it won't close when clicked inside|<code>{{$:/plugins/tobibeer/appear/defaults/keep}}</code><br/>see [[defaults|appear-Defaults]]|
+|''handle''|specifies a handler type for an appear widget used in a placeholder template tagged ''$:/tags/PageTemplate'' to remotely output the contents of all appear widgets whose ''handler'' attribute matches the same type<br>&raquo; by default handled via the state `$:/temp/appear-handler/<handle>`||
 |''handler''|specifies the handler type of the remote appear widget that is configured to ''handle'' this appear widget's inner reveal||
 |''variables''|should you have specified a remote ''handler'', specify context variables you wish preserved for the inner reveal as it is rendered in a different context|`currentTiddler`|
 |>|>| ![[Button Attributes|http://tiddlywiki.com/#ButtonWidget]] |

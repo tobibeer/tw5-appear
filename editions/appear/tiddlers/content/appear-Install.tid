@@ -1,6 +1,6 @@
 created: 20151209181007989
 creator: Tobias Beer
-modified: 20151229173345364
+modified: 20160120055237847
 modifier: Tobias Beer
 title: appear-Install
 type: text/vnd.tiddlywiki
@@ -9,6 +9,10 @@ type: text/vnd.tiddlywiki
 
 !! Version History
 
+; 0.6.0 / 2016-01-19
+: refactored & improved absolute popup handling
+: nesting support, i.e. for sticky popups with class "tc-popup-keep"
+: new attribute ''keep'' now by default makes popups "sticky"
 ; 0.5.7 / 2015-12-29
 : non-functional fixes to readme
 ; 0.5.5 / 2015-12-29
