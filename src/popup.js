@@ -26,7 +26,8 @@ Hijack and overwrite core Popup show() method
 */
 Popup.prototype.show = function(options) {
 	// The button
-	var el = options.domNode,
+	var cancelLevel,
+		el = options.domNode,
 		// Check if button absolutely positioned
 		absolute = $tw.utils.hasClass(el,"tc-popup-absolute"),
 		// Find out what was clicked on
@@ -36,28 +37,6 @@ Popup.prototype.show = function(options) {
 			var e = el,
 				x = 0,
 				y = 0;
-			/*
-			This is really shite!
-			There is neither any offsetParent nor any offsetLeft/-Top
-			when the element to trigger the popup is in another absolute popup
-			if(e.offsetParent === null) {
-				// So, we go up the parent nodes
-				while (e) {
-					// If it is a popup reveal
-					if($tw.utils.hasClass(e,"appear-reveal")) {
-						// Read the left and top from the style attribute, bah
-						x = parseInt(e.style.left.substr(0,e.style.left.length-2)) + 20;
-						y = parseInt(e.style.top.substr(0,e.style.top.length-2)) + 30;
-						// Done
-						e = null;
-					// Otherwise
-					} else {
-						// Next parent
-						e = e.parentNode;
-					}
-				}
-			} else {
-			*/
 			do {
 				x += e.offsetLeft || 0;
 				y += e.offsetTop  || 0;
@@ -69,14 +48,24 @@ Popup.prototype.show = function(options) {
 			left: el.offsetLeft,
 			top: el.offsetTop
 		};
+	// Level to be canceled
+	cancelLevel = info.popupLevel;
+	// If we clicked on a handle
+	if(info.isHandle) {
+		// Next level
+		cancelLevel++;
+	}
 	// Cancel any higher level popups
-	this.cancel(info.popupLevel);
-	// Store the popup details
-	this.popups.push({
-		title: options.title,
-		wiki: options.wiki,
-		domNode: el
-	});
+	this.cancel(cancelLevel);
+	// Store the popup details if not already there
+	if(this.findPopup(options.title) === -1) {
+		// Store the popup details
+		this.popups.push({
+			title: options.title,
+			wiki: options.wiki,
+			domNode: el
+		});
+	}
 	// Calculate absolute offset?
 	offset = absolute ? calcAbsoluteOffset(el) : offset;
 	// Set the state tiddler
@@ -100,14 +89,33 @@ Popup.prototype.popupInfo = function(domNode) {
 		node = domNode;
 	// First check ancestors to see if we're within a popup handle
 	while(node && popupCount === undefined) {
-		if($tw.utils.hasClass(node,"tc-popup-handle") || $tw.utils.hasClass(node,"tc-popup-keep")) {
+		// When
+		if(
+			// This is a handle
+			$tw.utils.hasClass(node,"tc-popup-handle") ||
+			// Or a sticky popup
+			$tw.utils.hasClass(node,"tc-popup-keep")
+		) {
+			// We set this flag (not exactly sure about the general idea here)
 			isHandle = true;
 		}
-		if($tw.utils.hasClass(node,"tc-popup")) {
+		// When
+		if(
+			// It's a reveal
+			$tw.utils.hasClass(node,"tc-reveal") && (
+				// Being a popup
+				$tw.utils.hasClass(node,"tc-popup") ||
+				// Or a popup-handle reveal (the choice of name seems confusing)
+				$tw.utils.hasClass(node,"tc-popup-handle")
+			)
+		) {
+			// Calculate popup level via zIndex
 			popupCount = parseInt(node.style.zIndex)-1000;
 		}
+		// Next Parent
 		node = node.parentNode;
 	}
+	// Create info object
 	var info = {
 		popupLevel: popupCount||0,
 		isHandle: isHandle
@@ -115,17 +123,54 @@ Popup.prototype.popupInfo = function(domNode) {
 	return info;
 };
 
+/*
+Hijack core handleEvent
+*/
+Popup.prototype.handleEvent = function(event) {
+	if(event.type === "click") {
+		// Find out what was clicked on
+		var info = this.popupInfo(event.target),
+			cancelLevel = info.popupLevel - 1;
+		// Don't remove the level that was clicked on if we clicked on a handle
+		if(info.isHandle) {
+			if(cancelLevel < 0) {
+				cancelLevel = 1;
+			} else {
+				cancelLevel++;
+			}
+		}
+		// Cancel
+		this.cancel(cancelLevel);
+	}
+};
+
+
 // Hijack readPopupState of core reveal widget to set zIndex
 Reveal.prototype.refresh = function() {
 	var domNode,
 		wasOpen = this.isOpen;
 	// Run core handler
 	refreshCoreReveal.apply(this,arguments);
+	// Reference to domNode
 	domNode = this.domNodes[0];
 	if(
+		// If the popup is now open AND
 		this.isOpen &&
-	   	wasOpen !== this.isOpen &&
-	   	domNode
+		(
+			// It was not before
+	   		wasOpen !== this.isOpen ||
+			// Or does not have a zIndex
+			!domNode.style.zIndex
+		// AND
+		) &&
+		// There actually is a domNode AND
+	   	domNode && (
+			// This is a popup reveal OR
+			this.type === "popup" ||
+			// It's a dropdown-reveal
+			$tw.utils.hasClass(domNode, "tc-block-dropdown") &&
+			$tw.utils.hasClass(domNode, "tc-reveal")
+		)
 	) {
 		// Dynamically set z-index
 		domNode.style.zIndex = 1000 + $tw.popup.popups.length;

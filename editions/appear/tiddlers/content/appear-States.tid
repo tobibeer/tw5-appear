@@ -1,6 +1,6 @@
 created: 20151216095443224
 creator: Tobias Beer
-modified: 20151216114033941
+modified: 20160122205035302
 modifier: Tobias Beer
 tags: 
 title: appear-States
@@ -8,7 +8,7 @@ type: text/vnd.tiddlywiki
 
 The appear widget simplifies <<x StateMechanism "state handling">> for you, by default not even requiring you to specify a state at all. In that case, a state is automatically qualified for you using the <<x "qualify Macro">> algorithm and a few extra bits extracted from the attributes.
 
-What's more, you do not need to know anything about how to correctly match the different state attributes of the underlying <<x ButtonWidget>> or <<x RevealWidget>>, i.e. no "popup" attribute" for you to specify. All you need to declare is the state you wish to use and the type with which you wish it displayed.
+What's more, you do not need to know anything about how to correctly match the different state attributes of the underlying <<x ButtonWidget>> or <<x RevealWidget>>, i.e. no "popup" attribute for you to specify. All you need to declare is the state you wish to use and the type with which you wish it displayed.
 
 If the automatically qualified state should not be good enough to create a unique state, you can use the ''$state'' attribute to simply append a unique string to the qualified state already calculated for you.
 
@@ -24,15 +24,15 @@ Unless you change the [[default-state|appear-Defaults]], as you can see in the [
 
 Should you render inner reveals at remote locations away from the document flow, the corresponding handler state is managed at a tiddler under the namespace `$:/temp/appear-handlers/`.
 
-For an example, <$appear show="click me" mode="inline" type="popup" handler="popups">
+For an example, <$appear show="click me" type="popup" handler="popups">
 This popup content is actually handled by:<br>
 [[$:/.tb/ui/PageTemplate/popups]]</$appear>:
 
 Here is the handler state for the widget that does `handle="popups"`:<br>
-{{{ [prefix[$:/temp/appear-handlers/]] }}}
+{{{ [prefix[$:/temp/appear-handler/]] }}}
 
 @@.note
-''Technical Note:'' It contains the full parse tree for the inner reveal of each appear widget that specifies `handler="popups"`, thus rendered into the appear widget specifying `handle="popups"`, e.g. [[$:/.tb/ui/PageTemplate/popups]].
+''Technical Note:'' It merely contains the title of the last appear widget state being set so as to trigger a refresh cycle. The parse-tree rendered into the appear widget specifying `handle="popups"`, e.g. [[$:/.tb/ui/PageTemplate/popups]] is actually retrieved from a global cache object.
 @@
 
 !! Currently Saved States

@@ -1,6 +1,6 @@
 created: 20150201173223292
 creator: Tobias Beer
-modified: 20160120071231991
+modified: 20160122202311704
 modifier: Tobias Beer
 summary: examples for the [[appear]] widget
 tags: appear Examples
@@ -46,6 +46,19 @@ I will close as well when you click inside me.</$appear> after""">>
 @@.note
 ''Note:'' The above uses the ''$state'' attribute to specify a shortcut way to qualify a unique state with respect to the current tiddler.
 @@
+
+!! Nested Popups
+
+// You can nest popups like so://
+
+<<` """<$appear type="popup" $state="click" show="click">
+<$appear type="popup" $state="again" show="again">
+<$appear type="popup" $state="once more" show="once more" style="width:600px">
+
+{{preview}}
+</$appear>
+</$appear>
+</$appear>""">>
 
 !! Simple Slider With Custom Button
 
