@@ -1,6 +1,6 @@
 created: 20151209181007989
 creator: Tobias Beer
-modified: 20160122210751570
+modified: 20160909050225651
 modifier: Tobias Beer
 title: appear-Install
 type: text/vnd.tiddlywiki
@@ -9,6 +9,8 @@ type: text/vnd.tiddlywiki
 
 !! Version History
 
+; 0.6.2 / 2016-09-09
+: fixed bug in hijack of core reveal widget affecting the sidebar toggle
 ; 0.6.1 / 2016-01-22
 : fixed bug concerning search "dropdown"
 ; 0.6.0 / 2016-01-20

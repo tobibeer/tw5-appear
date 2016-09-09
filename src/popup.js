@@ -147,10 +147,10 @@ Popup.prototype.handleEvent = function(event) {
 
 // Hijack readPopupState of core reveal widget to set zIndex
 Reveal.prototype.refresh = function() {
-	var domNode,
+	var domNode,result,
 		wasOpen = this.isOpen;
 	// Run core handler
-	refreshCoreReveal.apply(this,arguments);
+	result = refreshCoreReveal.apply(this,arguments);
 	// Reference to domNode
 	domNode = this.domNodes[0];
 	if(
@@ -175,6 +175,7 @@ Reveal.prototype.refresh = function() {
 		// Dynamically set z-index
 		domNode.style.zIndex = 1000 + $tw.popup.popups.length;
 	}
+	return result;
 };
 
 })();
