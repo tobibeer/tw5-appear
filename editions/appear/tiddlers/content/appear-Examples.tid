@@ -21,10 +21,6 @@ Some more text.</$appear> after""">>
 ''Note:'' The <<x StateMechanism state>> is automatically qualified for you and sufficient for most use cases.
 @@
 
-!! Simple Popup
-
-<<` """before <$appear type="popup">
-
 ! I Am Sticky
 
 Clicking anywhere outside will close me.</$appear> after""">>
@@ -63,6 +59,17 @@ I will close as well when you click inside me.</$appear> after""">>
 !! Simple Slider With Custom Button
 
 <<` """before <$appear show="slide down" $state="slider-button">
+
+!! Custom Button With HTML Markup
+
+<$appear show="<h1>A heading!</h1>">
+
+And some content for you.</$appear>
+
+!! Simple Popup
+
+<<` """before <$appear type="popup">
+
 
 ! Sliding
 
